@@ -25,14 +25,23 @@
 
 			$query = $con->query($sql);
 			if($query!=null){
-				print "<script>alert(\"Validación exitosa. Proceda a logearse\");window.location='../login.php';</script>";
+				print "<script>alert(\"Validación exitosa. Proceda a logearse\");window.location='./login.php';</script>";
 				}
-						/*
-						$email = $_POST["email"];
-						*/
-			$email = "name@domail.com";
+				
+				// Obtengo la dirección de correo para enviar el aviso
+				$sql1= "select * from user where activation_key=\"$codactivacion\"";
+				$query = $con->query($sql1);
+				while ($r=$query->fetch_array()) {
+					$found=true;
+					$email = $r['email'];
+					break;
+				}
+
+				//$email = $_POST["email"];
+				$headers = "From: name@domain.com";
+				
 			// Enviar un mensaje para confirmar la dirección de email introducida
-			mail($email,"Cuenta activada", "Ya puede acceder a su cuenta ya que ha sido verificada y activada.");
+			mail($email,"Cuenta activada", "Ya puede acceder a su cuenta ya que ha sido verificada y activada. http://www.domain.com/login.php", $headers);
 
 			}
 
